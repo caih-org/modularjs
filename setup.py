@@ -27,7 +27,10 @@ doclines = __doc__.strip().splitlines()
 
 setup(name='modularjs',
       version='0.1',
-      entry_points={'console_scripts': ['modularjs = modularjs:main']},
+      py_modules=['modularjs'],
+      data_files=[('', ['include.js']),
+                  ('lib', ['lib/yuicompressor-2.4.2.jar'])],
+      scripts=['modularjs'],
       maintainer='César Izurieta',
       maintainer_email='cesar@caih.org',
       url='http://modularjs.googlecode.com/',

@@ -8,6 +8,7 @@ import os.path
 import subprocess
 import shutil
 import re
+from pkg_resources import get_distribution, ResourceManager
 from optparse import OptionParser
 
 
@@ -37,11 +38,11 @@ def main():
     command = input_modules[0]
     input_modules = input_modules[1:]
 
-    dirname = os.path.dirname(__file__)    
+    distribution = get_distribution("modularjs")
 
     if command == 'init':
         print 'Initializing...'
-        filename = os.path.join(dirname, 'include.js')
+        filename = distribution.get_resource_filename(ResourceManager(), 'include.js');
         shutil.copy(filename, '.')
         print 'Done, file %s copied to current directory' % filename
 
@@ -54,7 +55,7 @@ def main():
                 include(input_module, output)
     
         with open('%s.compressed.js' % output_basename, 'w') as output:
-            jar = os.path.join(dirname, 'lib', 'yuicompressor-2.4.2.jar')
+            jar = distribution.get_resource_filename(ResourceManager(), os.path.join('lib', 'yuicompressor-2.4.2.jar'));
             p = subprocess.Popen(['java', '-jar', jar,
                                   '%s.js' % output_basename], stdout=output)
 
