@@ -1,11 +1,11 @@
 /**
- * JavaScript Automatic Build System
+ * modularjs: A modular javascript system 
  *
  * How to use:
  *
  * 1. Add to head:
  *      <script type="text/javascript"
- *              src="import.js?somepackage.SomeModule1,somepackage.SomeModule2">
+ *              src="include.js?somepackage.SomeModule1,somepackage.SomeModule2">
  *      </script>
  *
  * 2. And anywhere in your js files:
@@ -55,8 +55,8 @@ var modularjs = {
     },
 
     /**
-     * Imports a module. Only absolute imports.
-     * It's aliased to the global function 'import'.
+     * Includes a module. Only absolute includes.
+     * It's aliased to the global function 'include'.
      *
      * @param module {string} The module name
      */
