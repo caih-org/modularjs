@@ -41,9 +41,9 @@ var modularjs = {
 
         for (var i = 0; i < scripts.length; i++) {
             var src = scripts[i].src;
-            if (src.indexOf("modularjs.js") > 0) {
+            if (src.indexOf("include.js") > 0) {
                 var parts = src.split("?");
-                modularjs.basePath = parts[0].replace(/modularjs\.js.*/, '');
+                modularjs.basePath = parts[0].replace(/include\.js.*/, '');
                 if (parts.length > 1) {
                     parts = parts[1].split(",");
                     for (var j = 0; j < parts.length; j++) {

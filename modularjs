@@ -53,11 +53,13 @@ def main():
             include("include", output)
             for input_module in input_modules:
                 include(input_module, output)
-    
+        print 'Wrote %s.js' % output_basename
+
         with open('%s.compressed.js' % output_basename, 'w') as output:
             jar = distribution.get_resource_filename(ResourceManager(), os.path.join('lib', 'yuicompressor-2.4.2.jar'));
             p = subprocess.Popen(['java', '-jar', jar,
                                   '%s.js' % output_basename], stdout=output)
+        print 'Wrote %s.compressed.js' % output_basename
 
     else:
         help()
