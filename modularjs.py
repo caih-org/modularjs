@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import with_statement
+
 import sys
 import os
 import os.path
@@ -11,8 +13,14 @@ from optparse import OptionParser
 
 LOADED = {}
 
+def help():
+    global parser
+    print parser.format_help()
+    exit(1)
+
 
 def main():
+    global parser
     name = sys.argv[0]
     usage = """\t%s init
 \t%s build MODULE_NAME_1 [MODULE_NAME_1 ...] [-o OUTPUT_BASE_NAME]""" % (name, name)
@@ -23,31 +31,35 @@ def main():
 
     argc = len(sys.argv)
 
-    if argc < 3:
-        print parser.format_help()
-        exit(1)
+    if argc < 2:
+        help()
 
     command = input_modules[0]
     input_modules = input_modules[1:]
 
-    dirname = os.path.dirname(__file__)
+    dirname = os.path.dirname(__file__)    
 
-    if options.output:
-        output_basename = options.output
+    if command == 'init':
+        print 'Initializing...'
+        filename = os.path.join(dirname, 'include.js')
+        shutil.copy(filename, '.')
+        print 'Done, file %s copied to current directory' % filename
+
+    elif command == 'build':
+        output_basename = options.output or '%s.build' % input_modules[0]
+    
+        with open('%s.js' % output_basename, 'w') as output:
+            include("include", output)
+            for input_module in input_modules:
+                include(input_module, output)
+    
+        with open('%s.compressed.js' % output_basename, 'w') as output:
+            jar = os.path.join(dirname, 'lib', 'yuicompressor-2.4.2.jar')
+            p = subprocess.Popen(['java', '-jar', jar,
+                                  '%s.js' % output_basename], stdout=output)
+
     else:
-        output_basename = '%s.build' % input_modules[0]
-
-    output = open('%s.js' % output_basename, 'w');
-    include("modularjs", output)
-    for input_module in input_modules:
-        include(input_module, output)
-    output.close()
-
-    jar = os.path.join(dirname, 'lib', 'yuicompressor-2.4.2.jar')
-    output = open('%s.compressed.js' % output_basename, 'w');
-    p = subprocess.Popen(['java', '-jar', jar, '%s.js' % output_basename],
-                         stdout=output)
-    output.close()
+        help()
 
 
 _INCLUDE_REGEX = re.compile(r"""^(\s*)include\(['"](.*)['"]\);$""")
@@ -86,4 +98,4 @@ if __name__ == '__main__':
     except ImportError:
         pass
 
-    main();
+    main()

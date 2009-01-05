@@ -9,7 +9,7 @@
  *      </script>
  *
  * 2. And anywhere in your js files:
- *      import("somepackage.SomeOtherModule");
+ *      include("somepackage.SomeOtherModule");
  *
  * Modules are loaded from [package]/[subpackage]/[ModuleName].js files.
  *
