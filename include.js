@@ -61,6 +61,10 @@ var modularjs = {
      * @param module {string} The module name
      */
     include: function (module) {
+        if (!module) {
+            throw new Error("Invalid module name: " + module);
+        }
+
         if (modularjs.loaded[module]) return;
 
         var filename = modularjs.filename(module);
