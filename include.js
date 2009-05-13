@@ -79,7 +79,7 @@ var modularjs = {
             try {
                 window.eval(contents);
             } catch(e) {
-                if (console) {
+                if (typeof console != "undefined") {
                     console.log("Error importing module", module, e);
                 }
             }

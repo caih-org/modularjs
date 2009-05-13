@@ -1,0 +1,57 @@
+<html>
+<head>
+	<title>modularjs Test</title>
+	<style type="text/css">
+		div.error { color: red; }
+		div.ok { color: green; }
+	</style>
+	<script type="text/javascript">
+		var log = function(class_, message) {
+			var e = document.getElementById("messages");
+
+			e.innerHTML += "<div class=\"" + class_ + "\">" + message + "</div>";
+		}
+
+		var assert = function(correct, message, errorMessage) {
+			if (!errorMessage) {
+				errorMessage = "ERROR";
+			}
+
+			if (correct) {
+				log("ok", message + ": OK");
+			} else {
+				log("error", message + ", ERROR: " + errorMessage);
+			}
+		}
+
+		var assertEquals = function(result, expected, message) {
+			assert(result == expected, message, "Result: " + result + ", expected: " + expected);
+		}
+
+		var assertNotEquals = function(result, expected, message) {
+			assert(result != expected, message, "Result: " + result + ", expected different from: " + expected);
+		}
+
+		var test = function() {
+			log("", "Tests starting");
+			assertNotEquals(typeof MainModule, "undefined", "Variable defined in MainModule");
+			assertNotEquals(typeof MainModuleWithoutVar, "undefined", "Variable defined in MainModule without using 'var'");
+			assertNotEquals(typeof MainModuleWithEval, "undefined", "Variable defined in MainModule using eval");
+			assertNotEquals(typeof MainModuleWithEvalWithoutVar, "undefined", "Variable defined in MainModule using eval without using 'var'");
+
+			assertNotEquals(typeof ModuleA, "undefined", "Variable defined in ModuleA, included from MainModule");
+			assertNotEquals(typeof ModuleB, "undefined", "Variable defined in ModuleB, included from ModuleB");
+
+			assertEquals(typeof ModuleC, "undefined", "ModuleC not yet included");
+			include("ModuleC");
+			assertNotEquals(typeof ModuleC, "undefined", "ModuleC imported");
+			log("", "Tests completed");
+		}
+	</script>
+	<script type="text/javascript" src="include.js?MainModule"></script>
+</head>
+<body onload="test()">
+	<h1>ModularJS Test Suite</h1>
+	<div id="messages"></div>
+</body>
+</html>
