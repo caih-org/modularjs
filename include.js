@@ -15,6 +15,8 @@
  *
  * See the README file to learn how to compile your modules into a single
  * compressed file.
+ *
+ * http://modularjs.googlecode.com
  */
 var modularjs = {
 
@@ -74,7 +76,13 @@ var modularjs = {
 
         with (window) {
             var contents = modularjs.xhr.responseText + "\r\n//@ sourceURL=" + filename;
-            window.eval(contents);
+            try {
+                window.eval(contents);
+            } catch(e) {
+                if (console) {
+                    console.log("Error importing module", module, e);
+                }
+            }
         }
 
         modularjs.loaded[module] = true;

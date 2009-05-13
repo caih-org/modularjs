@@ -4,7 +4,7 @@ See modularjs.js for instructions on how to use modularjs in your javascript sou
 
 To create a build execute:
 
-modularjs.py build ModuleName
+modularjs build ModuleName
 
 in the directory where your module is located.
 
