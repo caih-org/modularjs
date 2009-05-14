@@ -26,8 +26,7 @@ Operating System :: POSIX
 doclines = __doc__.strip().splitlines()
 
 setup(name='modularjs',
-      version='0.1',
-      py_modules=['modularjs'],
+      version='0.2.0',
       data_files=[('', ['include.js']),
                   ('lib', ['lib/yuicompressor-2.4.2.jar'])],
       scripts=['modularjs'],
