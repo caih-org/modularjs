@@ -76,14 +76,14 @@ var modularjs = {
 
         var contents = modularjs.xhr.responseText + "\r\n//@ sourceURL=" + filename;
 
-		try {
-			if (window.execScript) {
-				window.execScript(contents);
-			} else {
-				with (window) {
-					window.eval(contents);
-				}
-			}
+        try {
+            if (window.execScript) {
+                window.execScript(contents);
+            } else {
+                with (window) {
+                    window.eval(contents);
+                }
+            }
         } catch(e) {
             if (typeof console != "undefined") {
                 console.log("Error importing module", module, e);
@@ -107,4 +107,3 @@ var modularjs = {
 var include = modularjs.include;
 
 modularjs.init();
-
