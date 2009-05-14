@@ -35,7 +35,7 @@ var modularjs = {
         } else if (typeof ActiveXObject != "undefined") {
             modularjs.xhr = new ActiveXObject("Microsoft.XMLHTTP");
         } else {
-            alert("XMLHttpRequest not supported");
+            throw new Error("XMLHttpRequest not supported");
         }
 
         var head = document.getElementsByTagName("head")[0];
