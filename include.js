@@ -35,7 +35,7 @@ var modularjs = {
         } else if (typeof ActiveXObject != "undefined") {
             modularjs.xhr = new ActiveXObject("Microsoft.XMLHTTP");
         } else {
-            throw new Error("XMLHttpRequest not supported");
+            alert("XMLHttpRequest not supported");
         }
 
         var head = document.getElementsByTagName("head")[0];
@@ -43,8 +43,8 @@ var modularjs = {
 
         for (var i = 0; i < scripts.length; i++) {
             var src = scripts[i].src;
-            if (src.indexOf("include.js") > 0) {
-                var parts = src.split("?");
+            if (src.match(/.*include\.js.*/)) {
+                var parts = src.split(/\?/);
                 modularjs.basePath = parts[0].replace(/include\.js.*/, '');
                 if (parts.length > 1) {
                     parts = parts[1].split(",");
@@ -74,14 +74,19 @@ var modularjs = {
         modularjs.xhr.open("get", filename, false);
         modularjs.xhr.send(null);
 
-        with (window) {
-            var contents = modularjs.xhr.responseText + "\r\n//@ sourceURL=" + filename;
-            try {
-                window.eval(contents);
-            } catch(e) {
-                if (typeof console != "undefined") {
-                    console.log("Error importing module", module, e);
-                }
+        var contents = modularjs.xhr.responseText + "\r\n//@ sourceURL=" + filename;
+
+		try {
+			if (window.execScript) {
+				window.execScript(contents);
+			} else {
+				with (window) {
+					window.eval(contents);
+				}
+			}
+        } catch(e) {
+            if (typeof console != "undefined") {
+                console.log("Error importing module", module, e);
             }
         }
 
