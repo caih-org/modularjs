@@ -142,7 +142,7 @@ var modularjs = {
             modularjs.xhr.open("head", modularjs.basePath + filename, false);
             modularjs.xhr.send(null);
 
-            return modularjs.xhr.status == 0;
+            return modularjs.xhr.status == 0 || modularjs.xhr.status == 200;
         } catch(e) {
             return false;
         }
