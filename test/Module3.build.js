@@ -1,3 +1,4 @@
+var __build__ = true;
 /**
  * modularjs: A modular javascript system 
  *
@@ -144,3 +145,13 @@ if (typeof __build__ == "undefined") {
 	modularjs.init();
 }
 
+
+modularjs.loaded["include"] = true;
+
+var MainModule3 = true;
+
+
+modularjs.loaded["Module3"] = true;
+
+
+modularjs.init();

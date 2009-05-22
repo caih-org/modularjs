@@ -31,6 +31,7 @@ def build(output_basename, input_modules):
         jar = distribution.get_resource_filename(ResourceManager(), yui)
         p = subprocess.Popen(['java', '-jar', jar,
                               '%s.js' % output_basename], stdout=output)
+        p.wait()
 
     modularjslogger.info('Wrote %s.compressed.js' % output_basename)
 

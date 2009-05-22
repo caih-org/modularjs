@@ -94,14 +94,48 @@ var modularjs = {
     },
 
     /**
-     * Returns the filename that corresponds to a module
+     * Returns the best filename that corresponds to a module.
      *
      * @param module {string} The module name
      * @returns The module filename
      */
     filename: function (module) {
-        return modularjs.basePath + module.replace(/\./g, "/") + ".js";
+        var filename = null;
+
+        filename = module + ".build.compressed.js";
+        if (modularjs.fileExists(filename)) {
+            return filename;
+        }
+
+        filename = module + ".build.js";
+        if (modularjs.fileExists(filename)) {
+            return filename;
+        }
+
+        filename = module.replace(/\./g, "/") + ".js";
+        if (modularjs.fileExists(filename)) {
+            return filename;
+        }
+
+        throw new Error("Module " + module + " not found.");
+    },
+
+    /**
+     * Checks for file existence
+     *
+     * @param filename {string} With the filename
+     * @returns The module filename
+     */
+    fileExists: function (filename) {
+        try {
+            modularjs.xhr.open("head", modularjs.basePath + filename, false);
+            modularjs.xhr.send(null);
+            return modularjs.xhr.status == 0;
+        } catch(e) {
+            return false;
+        }
     }
+
 };
 
 var include = modularjs.include;

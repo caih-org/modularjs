@@ -37,12 +37,24 @@
 			assertNotEquals(typeof modularjs, "undefined", "modularjs included");
 			assertNotEquals(typeof modularjs.include, "undefined", "modularjs.include is defined");
 			assertNotEquals(typeof include, "undefined", "include function is defined");
-			assertNotEquals(typeof MainModule, "undefined", "Variable defined in MainModule");
-			assertNotEquals(typeof MainModuleWithoutVar, "undefined", "Variable defined in MainModule without using 'var'");
-			assertNotEquals(typeof MainModuleWithEval, "undefined", "Variable defined in MainModule using eval");
-			assertNotEquals(typeof MainModuleWithEvalWithoutVar, "undefined", "Variable defined in MainModule using eval without using 'var'");
 
-			assertNotEquals(typeof ModuleA, "undefined", "Variable defined in ModuleA, included from MainModule");
+			assertNotEquals(typeof Module1, "undefined", "Module1 loaded");
+
+			assertEquals(typeof Module1, typeof Module2,
+				"Variable defined in Module2");
+			assertEquals(typeof Module1WithoutVar, typeof Module2WithoutVar,
+				"Variable defined in Module2 without using 'var'");
+			assertEquals(typeof Module1WithEval, typeof Module2WithEval,
+				"Variable defined in Module2 using eval");
+			assertEquals(typeof Module1WithEvalWithoutVar, typeof Module2WithEvalWithoutVar,
+				"Variable defined in Module2 using eval without using 'var'");
+
+			assertEquals(typeof Module1, typeof Module3,
+				"Variable defined in Module3 build");
+			assertEquals(typeof Module1, typeof Module4,
+				"Variable defined in Module4 compressed build");
+
+			assertNotEquals(typeof ModuleA, "undefined", "Variable defined in ModuleA, included from Module");
 			assertNotEquals(typeof ModuleB, "undefined", "Variable defined in ModuleB, included from ModuleB");
 
 			assertEquals(typeof ModuleC, "undefined", "ModuleC not yet included");
@@ -51,10 +63,12 @@
 			log("", "Tests completed");
 		}
 	</script>
-	<script type="text/javascript" src="include.js?MainModule"></script>
+	<script type="text/javascript" src="include.js?Module2,ModuleA"></script>
+	<script type="text/javascript" src="Module1.js"></script>
 </head>
 <body onload="test()">
 	<h1>modularjs Test Suite</h1>
 	<div id="messages"></div>
 </body>
 </html>
+
