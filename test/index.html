@@ -34,6 +34,9 @@
 
 		var test = function() {
 			log("", "Tests starting");
+			assertNotEquals(typeof modularjs, "undefined", "modularjs included");
+			assertNotEquals(typeof modularjs.include, "undefined", "modularjs.include is defined");
+			assertNotEquals(typeof include, "undefined", "include function is defined");
 			assertNotEquals(typeof MainModule, "undefined", "Variable defined in MainModule");
 			assertNotEquals(typeof MainModuleWithoutVar, "undefined", "Variable defined in MainModule without using 'var'");
 			assertNotEquals(typeof MainModuleWithEval, "undefined", "Variable defined in MainModule using eval");
@@ -51,7 +54,7 @@
 	<script type="text/javascript" src="include.js?MainModule"></script>
 </head>
 <body onload="test()">
-	<h1>ModularJS Test Suite</h1>
+	<h1>modularjs Test Suite</h1>
 	<div id="messages"></div>
 </body>
 </html>
