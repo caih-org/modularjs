@@ -106,7 +106,7 @@ var modularjs = {
 
 var include = modularjs.include;
 
-if (!__build__) {
+if (typeof __build__ == "undefined") {
 	modularjs.init();
 }
 
