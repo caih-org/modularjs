@@ -24,6 +24,8 @@ var modularjs = {
 
     loaded: {},
 
+    loading: {},
+
     /**
      * Inits the modularjs system.
      */
@@ -67,7 +69,15 @@ var modularjs = {
             throw new Error("Invalid module name: " + module);
         }
 
-        if (modularjs.loaded[module]) return;
+        if (modularjs.loaded[module]) {
+            return;
+        }
+
+        if (modularjs.loading[module]) {
+            throw new Error("Module already loading, posible recursive import: " + module);
+        }
+
+        modularjs.loading[module] = true;
 
         var filename = modularjs.filename(module);
 
@@ -90,6 +100,7 @@ var modularjs = {
             }
         }
 
+        modularjs.loading[module] = false;
         modularjs.loaded[module] = true;
     },
 
@@ -130,6 +141,7 @@ var modularjs = {
         try {
             modularjs.xhr.open("head", modularjs.basePath + filename, false);
             modularjs.xhr.send(null);
+
             return modularjs.xhr.status == 0;
         } catch(e) {
             return false;

@@ -12,17 +12,19 @@ LOADED = {}
 
 modularjslogger = logging.getLogger('modularjs')
 
-def build(output_basename, input_modules):
+def build(output_basename, input_modules, selfinclude=False):
     """ Creates a build of javascript files """
 
     distribution = get_distribution('modularjs')
 
     with open('%s.js' % output_basename, 'w') as output:
-        output.write('var __build__ = true;\n');
-        include('include', output)
+        if selfinclude:
+            output.write('var __build__ = true;\n');
+            include('include', output)
         for input_module in input_modules:
             include(input_module, output)
-        output.write('\nmodularjs.init();');
+        if selfinclude:
+            output.write('\nmodularjs.init();');
 
     modularjslogger.info('Wrote %s.js' % output_basename)
 

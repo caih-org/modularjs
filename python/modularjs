@@ -20,6 +20,8 @@ def main():
     usage = """\t%s init
 \t%s build MODULE_NAME_1 [MODULE_NAME_1 ...] [-o OUTPUT_BASE_NAME]""" % (name, name)
     parser = OptionParser(usage=usage, version="%prog 0.1")
+    parser.add_option("-i", "--selfinclude", dest="selfinclude", action="store_true",
+                      help="Include 'include.js' in the build")
     parser.add_option("-o", "--output", dest="output",
                       help="Save output to OUTPUT_BASE_NAME", metavar="OUTPUT_BASE_NAME")
     options, input_modules = parser.parse_args()
@@ -42,7 +44,7 @@ def main():
 
     elif command == 'build':
         output_basename = options.output or '%s.build' % input_modules[0]
-        modularjs.build(output_basename, input_modules)
+        modularjs.build(output_basename, input_modules, options.selfinclude)
 
     else:
         help()

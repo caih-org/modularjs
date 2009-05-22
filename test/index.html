@@ -24,21 +24,22 @@
 			}
 		}
 
-		var assertEquals = function(result, expected, message) {
-			assert(result == expected, message, "Result: " + result + ", expected: " + expected);
+		var assertEquals = function(expected, actual, message) {
+			assert(actual == expected, message, "Result: " + actual + ", expected: " + expected);
 		}
 
-		var assertNotEquals = function(result, expected, message) {
-			assert(result != expected, message, "Result: " + result + ", expected different from: " + expected);
+		var assertNotEquals = function(expected, actual, message) {
+			assert(actual != expected, message, "Result: " + actual + ", expected different from: " + expected);
 		}
 
 		var test = function() {
 			log("", "Tests starting");
-			assertNotEquals(typeof modularjs, "undefined", "modularjs included");
-			assertNotEquals(typeof modularjs.include, "undefined", "modularjs.include is defined");
-			assertNotEquals(typeof include, "undefined", "include function is defined");
 
-			assertNotEquals(typeof Module1, "undefined", "Module1 loaded");
+			assertNotEquals("undefined", typeof modularjs, "modularjs included");
+			assertNotEquals("undefined", typeof modularjs.include, "modularjs.include is defined");
+			assertNotEquals("undefined", typeof include, "include function is defined");
+
+			assertNotEquals("undefined", typeof Module1, "Module1 loaded");
 
 			assertEquals(typeof Module1, typeof Module2,
 				"Variable defined in Module2");
@@ -54,16 +55,17 @@
 			assertEquals(typeof Module1, typeof Module4,
 				"Variable defined in Module4 compressed build");
 
-			assertNotEquals(typeof ModuleA, "undefined", "Variable defined in ModuleA, included from Module");
-			assertNotEquals(typeof ModuleB, "undefined", "Variable defined in ModuleB, included from ModuleB");
+			assertNotEquals("undefined", typeof ModuleA, "Variable defined in ModuleA");
+			assertNotEquals("undefined", typeof ModuleB, "Variable defined in ModuleB, included from ModuleA");
 
-			assertEquals(typeof ModuleC, "undefined", "ModuleC not yet included");
+			assertEquals("undefined", typeof ModuleC, "ModuleC not yet included");
 			include("ModuleC");
-			assertNotEquals(typeof ModuleC, "undefined", "ModuleC imported");
+			assertNotEquals("undefined", typeof ModuleC, "ModuleC included");
+
 			log("", "Tests completed");
 		}
 	</script>
-	<script type="text/javascript" src="include.js?Module2,ModuleA"></script>
+	<script type="text/javascript" src="include.js?Module2,Module3,Module4,ModuleA"></script>
 	<script type="text/javascript" src="Module1.js"></script>
 </head>
 <body onload="test()">

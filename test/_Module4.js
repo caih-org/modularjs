@@ -1,2 +1,2 @@
-var MainModule4 = true;
+var Module4 = true;
 

@@ -1,5 +1,5 @@
-var MainModule1 = true;
-MainModuleWithoutVar = true;
-eval("var MainModule1WithEval = true");
-eval("MainModule1WithEvalWithoutVar = true");
+var Module1 = true;
+Module1WithoutVar = true;
+eval("var Module1WithEval = true");
+eval("Module1WithEvalWithoutVar = true");
 
