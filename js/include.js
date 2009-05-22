@@ -106,4 +106,7 @@ var modularjs = {
 
 var include = modularjs.include;
 
-modularjs.init();
+if (!__build__) {
+	modularjs.init();
+}
+

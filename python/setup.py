@@ -27,6 +27,7 @@ doclines = __doc__.strip().splitlines()
 
 setup(name='modularjs',
       version='0.2',
+      py_modules=['modularjs'],
       data_files=[('', ['include.js']),
                   ('lib', ['lib/yuicompressor-2.4.2.jar'])],
       scripts=['modularjs'],
