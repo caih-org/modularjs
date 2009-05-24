@@ -5,6 +5,8 @@
 		div.error { color: red; }
 		div.ok { color: green; }
 	</style>
+	<script type="text/javascript" src="Module1.js"></script>
+	<script type="text/javascript" src="include.js?Module2,Module3,Module4,ModuleA"></script>
 	<script type="text/javascript">
 		var log = function(class_, message) {
 			var e = document.getElementById("messages");
@@ -59,14 +61,16 @@
 			assertNotEquals("undefined", typeof ModuleB, "Variable defined in ModuleB, included from ModuleA");
 
 			assertEquals("undefined", typeof ModuleC, "ModuleC not yet included");
-			include("ModuleC");
+            try {
+    			include("ModuleC");
+            } catch(e) {
+    			assertEquals("No error", e, "Error importing ModuleC");
+            }
 			assertNotEquals("undefined", typeof ModuleC, "ModuleC included");
 
 			log("", "Tests completed");
 		}
 	</script>
-	<script type="text/javascript" src="include.js?Module2,Module3,Module4,ModuleA"></script>
-	<script type="text/javascript" src="Module1.js"></script>
 </head>
 <body onload="test()">
 	<h1>modularjs Test Suite</h1>

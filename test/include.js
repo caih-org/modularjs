@@ -40,8 +40,9 @@ var modularjs = {
             throw new Error("XMLHttpRequest not supported");
         }
 
-        var head = document.getElementsByTagName("head")[0];
-        var scripts = head.getElementsByTagName("script");
+        modularjs.head = document.getElementsByTagName("head")[0];
+        modularjs.eval = modularjs.findEvalFunction();
+        var scripts = modularjs.head.getElementsByTagName("script");
 
         for (var i = 0; i < scripts.length; i++) {
             var src = scripts[i].src;
@@ -59,41 +60,83 @@ var modularjs = {
     },
 
     /**
+     * Finds the best function to be used.
+     */
+    findEvalFunction: function() {
+        var SET_GLOBAL_VAR_NAME = "__modularjs_global_test__"
+        var SET_GLOBAL_VAR = "var " + SET_GLOBAL_VAR_NAME + " = true;"
+
+        var setGlobal = function(evalFunction) {
+            if (!!window[SET_GLOBAL_VAR_NAME]) {
+                try {
+                    delete window[SET_GLOBAL_VAR_NAME];
+                } catch(e) {
+                    window[SET_GLOBAL_VAR_NAME] = undefined;
+                }
+            }
+            evalFunction(SET_GLOBAL_VAR);
+            return !!window[SET_GLOBAL_VAR_NAME];
+        }
+
+        var windowExecScript = function(contents) {
+            if (window.execScript) {
+                window.execScript(contents);
+            }        
+        }
+        if (setGlobal(windowExecScript)) {
+            return windowExecScript;
+        }
+
+        var withWindowEval = function(contents) {
+            with (window) {
+                window.eval(contents);
+            }
+        }
+        if (setGlobal(withWindowEval)) {
+            return withWindowEval;
+        }
+
+        var insertScript = function(contents) {
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.text = contents;
+            modularjs.head.appendChild(script);
+            modularjs.head.removeChild(script);
+        }
+        if (setGlobal(insertScript)) {
+            return insertScript;
+        }
+
+        throw new Error("Cannot determine a good eval function");
+    },
+
+    /**
      * Includes a module. Only absolute includes.
      * It's aliased to the global function 'include'.
      *
-     * @param module {string} The module name
+     * @param module {string} The module name (dot separated)
+     * @returns true if module was included correctly
      */
     include: function (module) {
         if (!module) {
-            throw new Error("Invalid module name: " + module);
+            throw new Error("No module name defined");
         }
 
         if (modularjs.loaded[module]) {
-            return;
+            return true;
         }
 
         if (modularjs.loading[module]) {
-            throw new Error("Module already loading, posible recursive import: " + module);
+            throw new Error("Possible recursive import: " + module);
         }
 
         modularjs.loading[module] = true;
 
-        var filename = modularjs.filename(module);
-
-        modularjs.xhr.open("get", filename, false);
-        modularjs.xhr.send(null);
-
-        var contents = modularjs.xhr.responseText + "\r\n//@ sourceURL=" + filename;
+        var contents = modularjs.getContents(module);
 
         try {
-            if (window.execScript) {
-                window.execScript(contents);
-            } else {
-                with (window) {
-                    window.eval(contents);
-                }
-            }
+            modularjs.eval(contents);
+            modularjs.loaded[module] = true;
         } catch(e) {
             if (typeof console != "undefined") {
                 console.log("Error importing module", module, e);
@@ -101,7 +144,8 @@ var modularjs = {
         }
 
         modularjs.loading[module] = false;
-        modularjs.loaded[module] = true;
+
+        return !!modularjs.loaded[module];
     },
 
     /**
@@ -110,22 +154,23 @@ var modularjs = {
      * @param module {string} The module name
      * @returns The module filename
      */
-    filename: function (module) {
+    getContents: function (module) {
+        var contents = null;
         var filename = null;
 
         filename = module + ".build.compressed.js";
-        if (modularjs.fileExists(filename)) {
-            return filename;
+        if (contents = modularjs.getFileContents(filename)) {
+            return contents + "\r\n//@ sourceURL=" + filename;
         }
 
         filename = module + ".build.js";
-        if (modularjs.fileExists(filename)) {
-            return filename;
+        if (contents = modularjs.getFileContents(filename)) {
+            return contents + "\r\n//@ sourceURL=" + filename;
         }
 
         filename = module.replace(/\./g, "/") + ".js";
-        if (modularjs.fileExists(filename)) {
-            return filename;
+        if (contents = modularjs.getFileContents(filename)) {
+            return contents + "\r\n//@ sourceURL=" + filename;
         }
 
         throw new Error("Module " + module + " not found.");
@@ -137,15 +182,18 @@ var modularjs = {
      * @param filename {string} With the filename
      * @returns The module filename
      */
-    fileExists: function (filename) {
+    getFileContents: function (filename) {
         try {
-            modularjs.xhr.open("head", modularjs.basePath + filename, false);
+            modularjs.xhr.open("get", modularjs.basePath + filename, false);
             modularjs.xhr.send(null);
 
-            return modularjs.xhr.status == 0 || modularjs.xhr.status == 200;
+            if (modularjs.xhr.status == 0 || modularjs.xhr.status == 200) {
+                return modularjs.xhr.responseText;
+            }
         } catch(e) {
-            return false;
         }
+
+        return "";
     }
 
 };
@@ -153,6 +201,6 @@ var modularjs = {
 var include = modularjs.include;
 
 if (typeof __build__ == "undefined") {
-	modularjs.init();
+    modularjs.init();
 }
 

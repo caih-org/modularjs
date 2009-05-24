@@ -1,0 +1,17 @@
+Version 0.1
+
+- Initial support for importing javascript files
+- Python CLI build system
+
+Version 0.2
+
+- Better support for IE
+- A test suite
+
+Version 0.3 (Not yet released)
+
+- Now it works correctly with Safari and Konqueror
+- Loading of compress or built version automatically
+- Better test suite
+- CLI now accepts -i to include "include.js" in the generated file
+

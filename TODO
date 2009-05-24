@@ -1,5 +1,5 @@
-* Have the js file import a compressed or built version if found
 * Write a java implementation of the build system
 * Write a php implementation of the build system
 * Write a [INSERT HERE] implementation of the build system
+* Integration with Dojo, and other toolkits
 
