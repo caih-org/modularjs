@@ -5,7 +5,7 @@
  *
  * 1. Add to head:
  *      <script type="text/javascript"
- *              src="include.js?somepackage.SomeModule1,somepackage.SomeModule2">
+ *          src="include.js?somepackage.SomeModule1,somepackage.SomeModule2">
  *      </script>
  *
  * 2. And anywhere in your js files:
