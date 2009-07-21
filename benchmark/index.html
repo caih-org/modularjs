@@ -1,0 +1,26 @@
+<html>
+<head>
+    <title>modularjs Test</title>
+    <script type="text/javascript" src="include.js"></script>
+    <script type="text/javascript">
+        var log = function(class_, message) {
+            var e = document.getElementById("messages");
+
+            e.innerHTML += "<div class=\"" + class_ + "\">" + message + "</div>";
+        }
+
+        var test = function() {
+            log("", "Tests starting");
+
+            
+            
+            log("", "Tests completed");
+        }
+    </script>
+</head>
+<body onload="test()">
+    <h1>modularjs Benchmarks</h1>
+    <div id="messages"></div>
+</body>
+</html>
+
