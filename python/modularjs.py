@@ -42,25 +42,26 @@ def include(module, output, indent=""):
     """ Process one module and writes to output """
 
     if module in LOADED:
-        return
+        return True
 
     try:
         lines = open(filename(module)).readlines()
     except IOError, e:
         modularjslogger.warning('Module %s not loaded: %s' % (module, e))
-        return
+        return False
 
     for line in open(filename(module)).readlines():
         include_module = _INCLUDE_REGEX.match(line)
 
-        if include_module:
-            include(include_module.group(2), output, indent + include_module.group(1))
-        else:
+        if not include_module or not include(include_module.group(2), output,
+                                             indent + include_module.group(1)):
             output.write(indent + line)
 
     output.write('\nmodularjs.loaded["%s"] = true;\n\n' % module)
     LOADED[module] = True
     modularjslogger.info('Module %s loaded' % module)
+
+    return True
 
 
 def filename(module):

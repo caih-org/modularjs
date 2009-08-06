@@ -168,13 +168,14 @@ var modularjs = {
     getContents: function(module) {
         var contents = null;
         var filename = null;
+        var build = module.replace(/\//g, ".");
 
-        filename = module + ".build.compressed.js";
+        filename = build + ".build.compressed.js";
         if (contents = modularjs.getFileContents(filename)) {
             return contents + "\r\n//@ sourceURL=" + filename;
         }
 
-        filename = module + ".build.js";
+        filename = build + ".build.js";
         if (contents = modularjs.getFileContents(filename)) {
             return contents + "\r\n//@ sourceURL=" + filename;
         }
