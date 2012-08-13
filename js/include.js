@@ -52,7 +52,7 @@ var modularjs = {
 
         for ( var i = 0; i < scripts.length; i++) {
             var src = scripts[i].src;
-            if (src.match(/.*include\.js.*/)) {
+            if (src && src.match(/.*include\.js.*/)) {
                 var parts = src.split(/\?/);
                 modularjs.basePath = parts[0].replace(/include\.js.*/, '');
                 if (parts.length > 1) {
@@ -150,13 +150,25 @@ var modularjs = {
             modularjs.loaded[module] = true;
         } catch (e) {
             if (typeof console != "undefined") {
-                console.error("Error importing module", module, e);
+                console.error("Error importing module: " + module, e);
             }
+            throw e;
         }
 
         modularjs.loading[module] = false;
 
         return !!modularjs.loaded[module];
+    },
+
+    includeCSS: function(module) {
+        var filename = "css/" + module.replace(/\./g, "/") + ".css";
+        var link = document.createElement("link");
+
+        link.setAttribute("type", "text/css");
+        link.setAttribute("rel", "stylesheet");
+        link.setAttribute("href", filename);
+
+        document.getElementsByTagName("head")[0].appendChild(link);
     },
 
     /**
@@ -211,6 +223,7 @@ var modularjs = {
 };
 
 var include = modularjs.include;
+var includeCSS = modularjs.includeCSS;
 
 if (typeof __build__ == "undefined") {
     modularjs.init();
