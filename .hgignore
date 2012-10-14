@@ -1,4 +1,6 @@
 example/Example.build.compressed.js
 example/Example.build.js
+python/build
 python/modularjs.egg-info
 python/modularjs.pyc
+
