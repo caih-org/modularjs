@@ -25,6 +25,8 @@ var MODULARJS_SET_GLOBAL_VAR = "var " + MODULARJS_SET_GLOBAL_VAR_NAME +
 
 var modularjs = {
 
+    BUILD_SEPARATOR_CHAR: ".",
+
     basePath: null,
 
     loaded: {},
@@ -180,14 +182,17 @@ var modularjs = {
     getContents: function(module) {
         var contents = null;
         var filename = null;
-        var build = module.replace(/\//g, ".");
+        var build_filename = module.replace(/\//g, this.BUILD_SEPARATOR_CHAR)
+                + this.BUILD_SEPARATOR_CHAR + "build";
+        var build_compressed_filename = build_filename
+                + this.BUILD_SEPARATOR_CHAR + "compressed";
 
-        filename = build + ".build.compressed.js";
+        filename = build_compressed_filename + ".js";
         if (contents = modularjs.getFileContents(filename)) {
             return contents + "\r\n//@ sourceURL=" + filename;
         }
 
-        filename = build + ".build.js";
+        filename = build_filename + ".js";
         if (contents = modularjs.getFileContents(filename)) {
             return contents + "\r\n//@ sourceURL=" + filename;
         }

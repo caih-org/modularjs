@@ -22,6 +22,8 @@ def main():
     parser = OptionParser(usage=usage, version="%prog 0.1")
     parser.add_option("-i", "--selfinclude", dest="selfinclude", action="store_true",
                       help="Include 'include.js' in the build")
+    parser.add_option("-s", "--separator", dest="separator", default=".",
+                      help="Use alternative name separator", metavar="SEPARATOR")
     parser.add_option("-o", "--output", dest="output",
                       help="Save output to OUTPUT_BASE_NAME", metavar="OUTPUT_BASE_NAME")
     options, input_modules = parser.parse_args()
@@ -43,8 +45,8 @@ def main():
         print 'Done, file %s copied to current directory' % filename
 
     elif command == 'build':
-        output_basename = options.output or '%s.build' % input_modules[0]
-        modularjs.build(output_basename, input_modules, options.selfinclude)
+        output_basename = options.output or '%s%sbuild' % (input_modules[0], options.separator)
+        modularjs.build(output_basename, input_modules, options.selfinclude, options.separator)
 
     else:
         help()

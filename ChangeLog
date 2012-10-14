@@ -4,6 +4,7 @@ Version 0.3 (Not yet released)
 - Loading of compress or built version automatically
 - Better test suite
 - CLI now accepts -i to include "include.js" in the generated file
+- Configurable built file separator
 
 Version 0.2
 

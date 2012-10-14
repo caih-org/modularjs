@@ -12,7 +12,7 @@ LOADED = {}
 
 modularjslogger = logging.getLogger('modularjs')
 
-def build(output_basename, input_modules, selfinclude=False):
+def build(output_basename, input_modules, selfinclude=False, separator="."):
     """ Creates a build of javascript files """
 
     distribution = get_distribution('modularjs')
@@ -28,7 +28,7 @@ def build(output_basename, input_modules, selfinclude=False):
 
     modularjslogger.info('Wrote %s.js' % output_basename)
 
-    with open('%s.compressed.js' % output_basename, 'w') as output:
+    with open('%s%scompressed.js' % (output_basename, separator), 'w') as output:
         yui = os.path.join('lib', 'yuicompressor-2.4.2.jar')
         jar = distribution.get_resource_filename(ResourceManager(), yui)
         p = subprocess.Popen(['java', '-jar', jar,
