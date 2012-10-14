@@ -27,6 +27,8 @@ var modularjs = {
 
     BUILD_SEPARATOR_CHAR: ".",
 
+    SEARCH_BUILD_AT_ROOT: true,
+
     basePath: null,
 
     loaded: {},
@@ -182,7 +184,8 @@ var modularjs = {
     getContents: function(module) {
         var contents = null;
         var filename = null;
-        var build_filename = module.replace(/\//g, this.BUILD_SEPARATOR_CHAR)
+        var build_filename = module.replace(/\./g,
+                this.SEARCH_BUILD_AT_ROOT ? this.BUILD_SEPARATOR_CHAR : "/")
                 + this.BUILD_SEPARATOR_CHAR + "build";
         var build_compressed_filename = build_filename
                 + this.BUILD_SEPARATOR_CHAR + "compressed";

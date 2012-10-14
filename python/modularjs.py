@@ -66,7 +66,7 @@ def include(module, output, indent=""):
 
 def filename(module):
     """
-    This function should be equivalent to the javascript function modularjs.filename
+    Gets the filename of a module
     """
 
     return module.replace('.', os.sep) + '.js'
